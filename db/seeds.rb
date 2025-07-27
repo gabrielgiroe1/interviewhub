@@ -7,3 +7,11 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Create 10 users with random email addresses and passwords
+10.times do |i|
+  User.find_or_create_by!(email_address: "user#{i}@gmail.com") do |user|
+    user.password = "password"
+    user.password_confirmation = "password"
+  end
+end
