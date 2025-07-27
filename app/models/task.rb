@@ -3,7 +3,7 @@ class Task < ApplicationRecord
 
   validates :title, presence: true
   validates :due_date, presence: true
-  enum :status, [ pending: "pending", in_progress: "in progress", done: "done" ]
+  enum :status, { pending: "pending", in_progress: "in progress", done: "done" }
 
   scope :pending, -> { where(status: :pending) }
   scope :done, -> { where(stauts: :done) }
