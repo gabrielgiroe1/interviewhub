@@ -1,16 +1,15 @@
 class TasksController < ApplicationController
-  allow_unauthenticated_access only: %i[new create edit update delete]
   def index
-    @tasks = Task.all
+    @tasks = Current.user&.tasks || Task.none
   end
 
   def new
-    @task = current_user.tasks.build
+    @task = Current.user.tasks.build
   end
 
   def create
-    @tasks = current_user.tasks.build(task_params)
-    if @tasks.save
+    @task = Current.user.tasks.build(task_params)
+    if @task.save
       redirect_to tasks_path, notice: "Task created successfully."
     else
       render :new, alert: "Failed to create task."
@@ -18,11 +17,15 @@ class TasksController < ApplicationController
   end
 
   def edit
-    @task = current_user.tasks.find(params[:id])
+    @task = Current.user.tasks.find(params[:id])
+  end
+
+  def show
+    @task = Current.user.tasks.find(params[:id])
   end
 
   def update
-    @task = current_user.tasks.find(params[:id])
+    @task = Current.user.tasks.find(params[:id])
     if @task.update(task_params)
       redirect_to tasks_path, notice: "Task updated successfully."
     else
@@ -30,13 +33,10 @@ class TasksController < ApplicationController
     end
   end
 
-  def delete
-    @task = current_user.tasks.find(params[:id])
-    if @task.destroy
-      redirect_to tasks_path, notice: "Task deleted successfully."
-    else
-      redirect_to tasks_path, alert: "Failed to delete task."
-    end
+  def destroy
+    @task = Current.user.tasks.find(params[:id])
+    @task.destroy
+    redirect_to tasks_path, notice: "Task deleted successfully."
   end
 
   private
