@@ -1,4 +1,18 @@
-<div>
-  <h1 class="font-bold text-4xl">Tasks#index</h1>
-  <p>Find me in app/views/tasks/index.html.erb</p>
+
+<h1>All tasks listed here for you</h1>
+<div class="my-4">
+<%= link_to "Create new task", new_task_path, class: " bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"%>
 </div>
+<% @tasks.each do |task|%>
+  <div class="task-item">
+    <p>Title: <%= link_to task.title, task_path(task)%>
+    <p> Status: <%=task.status%></p>
+    <p>Due date: <%= task.due_date.strftime("%B %d, %Y at %I:%M %p") if task.due_date %></p>
+    <div class="actions my-4 flex space-x-2">
+      <%= link_to "Edit", edit_task_path(task), class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"%>
+      <%= button_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"}, class: " bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"%>
+      <%= link_to "Show", task_path(task), class: " bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"%>
+      </div>
+  </div>
+  <hr>
+<% end %>
